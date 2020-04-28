@@ -1,0 +1,24 @@
+{
+  "name": "a5_server",
+  "version": "1.0.0",
+  "description": "Server for A5",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "author": "Ananth Bashyam",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "index.js": "^0.0.3",
+    "package-lock.json": "^1.0.0",
+    "package.json": "^2.0.1"
+  },
+  "engines": {
+    "node": "10.16.0",
+    "npm": "6.9.0"
+  }
+}
