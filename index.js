@@ -46,16 +46,20 @@ app.use((req, res, next) => {
     });
   }
 app.post("/",(req,res) => {
-    console.log(req.body.w);
+    console.log(res.body.w);
 });
 app.post("/registerScore",(req,res) => {
     //format -> {hash key: x age:}
-    //let hId = req.body.hash;
-    let age = req.body.age;
-    let empl = req.body.emp;
-    let gender = req.body.gender;
-    let prex = req.body.prex;
-    let score = Number(req.body.score);
+    //let hId = ob.hash;
+    let ob = req.body;
+    if (typeof ob == "string"){
+      ob = JSON.parse(ob);
+    }
+    let age = ob.age;
+    let empl = ob.emp;
+    let gender = ob.gender;
+    let prex = ob.prex;
+    let score = Number(ob.score);
     ageSum[age]+=score;
     empSum[empl]+=score;
     genderSum[gender]+=score;
@@ -71,11 +75,15 @@ app.post("/registerScore",(req,res) => {
 
 app.post("/getScore",(req,res) => {
   //format -> {hash key: x age:}
-  //let hId = req.body.hash;
-  let age = req.body.age;
-  let empl = req.body.emp;
-  let gender = req.body.gender;
-  let prex = req.body.prex;
+  //let hId = ob.hash;
+  let ob = req.body;
+    if (typeof ob == "string"){
+      ob = JSON.parse(ob);
+    }
+  let age = ob.age;
+  let empl = ob.emp;
+  let gender = ob.gender;
+  let prex = ob.prex;
   let out = [];
   out.push(ageSum[age]/ageData[age].length);
   out.push(empSum[empl]/empData[empl].length);
