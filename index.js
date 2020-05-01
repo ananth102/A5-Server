@@ -3,8 +3,37 @@ let app = express();
 let cors = require("cors");
 let path = require("path");
 
+let firebase = require("firebase/app");
+require("firebase/database");
+
+let firebaseConfig = {
+  apiKey: "AIzaSyAwJivg_StnV4ODdSDB7ERjfFjfmhg_qL8",
+  authDomain: "ua5-e7d57.firebaseapp.com",
+  databaseURL: "https://ua5-e7d57.firebaseio.com",
+  projectId: "ua5-e7d57",
+  storageBucket: "ua5-e7d57.appspot.com",
+  messagingSenderId: "754261369831",
+  appId: "1:754261369831:web:60ccb3ec5af66b750fd342"
+};
+let data = {};
+function getData() {
+  let v = {};
+  return database
+    .ref("data/")
+    .once("value")
+    .then(snapshot => {
+      data = snapshot.val();
+    });
+}
+
+firebase.initializeApp(firebaseConfig);
+let database = firebase.database();
+getData();
+//data = getData().then(woof => {data=woof});
+console.log("arrrg",data);
+
 let bodyParser = require("body-parser");
-//let data = {};
+
 let ageData = [[],[],[],[],[]];
 let empData = [[],[],[],[],[],[]];
 let genderArr = [[],[]];
@@ -51,6 +80,8 @@ app.post("/",(req,res) => {
 app.post("/registerScore",(req,res) => {
     //format -> {hash key: x age:}
     //let hId = ob.hash;
+    console.log("reg",data);
+    setArrs();
     let ob = req.body;
     if (typeof ob == "string"){
       ob = JSON.parse(ob);
@@ -60,6 +91,10 @@ app.post("/registerScore",(req,res) => {
     let gender = ob.gender;
     let prex = ob.prex;
     let score = Number(ob.score);
+
+
+
+
     ageSum[age]+=score;
     empSum[empl]+=score;
     genderSum[gender]+=score;
@@ -68,6 +103,9 @@ app.post("/registerScore",(req,res) => {
     empData[empl].push(score);
     genderArr[gender].push(score);
     prexArr[prex].push(score);
+    updateFirebased({ageData:ageData,empData:empData,genderArr:genderArr,
+    prexArr:prexArr,ageSum:ageSum,empSum:empSum,genderSum:genderSum,prexSum:prexSum
+    });
     console.log(ageSum);
     console.log(ageData);
     res.send("Done");
@@ -80,6 +118,8 @@ app.post("/getScore",(req,res) => {
     if (typeof ob == "string"){
       ob = JSON.parse(ob);
     }
+
+  let ord = getData();
   let age = ob.age;
   let empl = ob.emp;
   let gender = ob.gender;
@@ -90,6 +130,7 @@ app.post("/getScore",(req,res) => {
   out.push(genderSum[gender]/genderArr[gender].length);
   out.push(prexSum[prex]/prexArr[prex].length);
   res.send(out);
+  
 });
 
 
@@ -97,3 +138,36 @@ app.post("/getScore",(req,res) => {
 let port = process.env.PORT || 9000;
 
 app.listen(port);
+
+// function getData() {
+//   return database
+//     .ref("data/")
+//     .once("value")
+//     .then(snapshot => {
+//       console.log("ddd", snapshot.val());
+//       return snapshot.val();
+//     });
+// }
+
+function updateFirebased() {
+  //console.log(polls[pollid]);
+
+  database
+    .ref("data/")
+    .once("value")
+    .then(snapshot => {
+      database.ref("data").set({ ageData,empData,genderArr,prexArr,
+        ageSum,empSum,genderSum,prexSum });
+    });
+}
+function setArrs(){
+  //console.log(data);
+  ageData = data.ageData;
+  empData = data.empData;
+  genderArr = data.genderArr;
+  prexArr = data.prexArr;
+  ageSum = data.ageSum;
+  empSum = data.empSum;
+  genderSum = data.genderSum;
+  prexSum = data.prexSum;
+}
