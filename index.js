@@ -23,6 +23,7 @@ function getData() {
     .once("value")
     .then(snapshot => {
       data = snapshot.val();
+      
     });
 }
 
@@ -86,15 +87,12 @@ app.post("/registerScore",(req,res) => {
     if (typeof ob == "string"){
       ob = JSON.parse(ob);
     }
-    let age = Number(ob.age);
-    let empl = Number(ob.emp);
-    let gender = Number(ob.gender);
-    let prex = Number(ob.prex);
-    let score = Number(ob.score);
-
-
-
-
+    let age = parseInt(ob.age.replace(/['"]+/g, ''));
+    let empl = parseInt(ob.emp.replace(/['"]+/g, ''));
+    let gender = parseInt(ob.gender.replace(/['"]+/g, ''));
+    let prex = parseInt(ob.prex.replace(/['"]+/g, ''));
+    let score = parseFloat(ob.score.replace(/['"]+/g, ''));
+    
     ageSum[age]+=score;
     empSum[empl]+=score;
     genderSum[gender]+=score;
@@ -114,17 +112,22 @@ app.post("/registerScore",(req,res) => {
 app.post("/getScore",(req,res) => {
   //format -> {hash key: x age:}
   //let hId = ob.hash;
+  //console.log(data);
+  setArrs();
   let ob = req.body;
     if (typeof ob == "string"){
       ob = JSON.parse(ob);
     }
 
-  let ord = getData();
-  let age = Number(ob.age);
-  let empl = Number(ob.emp);
-  let gender = Number(ob.gender);
-  let prex = Number(ob.prex);
+  //let ord = getData();
+  console.log(ob.age);
+  
+  let age = parseInt(ob.age.replace(/['"]+/g, ''));
+  let empl = parseInt(ob.emp.replace(/['"]+/g, ''));
+  let gender = parseInt(ob.gender.replace(/['"]+/g, ''));
+  let prex = parseInt(ob.prex.replace(/['"]+/g, ''));
     //let score = Number(ob.score);
+  console.log(age);
   let out = [];
   out.push(ageSum[age]/ageData[age].length);
   out.push(empSum[empl]/empData[empl].length);
