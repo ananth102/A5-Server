@@ -86,10 +86,10 @@ app.post("/registerScore",(req,res) => {
     if (typeof ob == "string"){
       ob = JSON.parse(ob);
     }
-    let age = ob.age;
-    let empl = ob.emp;
-    let gender = ob.gender;
-    let prex = ob.prex;
+    let age = Number(ob.age);
+    let empl = Number(ob.emp);
+    let gender = Number(ob.gender);
+    let prex = Number(ob.prex);
     let score = Number(ob.score);
 
 
@@ -120,10 +120,11 @@ app.post("/getScore",(req,res) => {
     }
 
   let ord = getData();
-  let age = ob.age;
-  let empl = ob.emp;
-  let gender = ob.gender;
-  let prex = ob.prex;
+  let age = Number(ob.age);
+  let empl = Number(ob.emp);
+  let gender = Number(ob.gender);
+  let prex = Number(ob.prex);
+    //let score = Number(ob.score);
   let out = [];
   out.push(ageSum[age]/ageData[age].length);
   out.push(empSum[empl]/empData[empl].length);
