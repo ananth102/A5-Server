@@ -40,7 +40,6 @@ let ageData = [[],[],[],[],[]];
 let empData = [[],[],[],[],[],[]];
 let genderArr = [[],[]];
 let prexArr = [[],[],[],[],[],[]];
-
 let ageSum = [0,0,0,0,0];
 let empSum = [0,0,0,0,0,0];
 let genderSum = [0,0];
@@ -103,9 +102,7 @@ app.post("/registerScore",(req,res) => {
     empData[empl].push(score);
     genderArr[gender].push(score);
     prexArr[prex].push(score);
-    updateFirebased({ageData:ageData,empData:empData,genderArr:genderArr,
-    prexArr:prexArr,ageSum:ageSum,empSum:empSum,genderSum:genderSum,prexSum:prexSum
-    });
+    updateFirebased({ageData:ageData,empData:empData,genderArr:genderArr,prexArr:prexArr,ageSum:ageSum,empSum:empSum,genderSum:genderSum,prexSum:prexSum});
     console.log(ageSum);
     console.log(ageData);
     res.send("Done");
@@ -115,6 +112,7 @@ app.post("/getScore",(req,res) => {
   //format -> {hash key: x age:}
   //let hId = ob.hash;
   //console.log(data);
+  
   if(!initialized)setArrs();
   initialized = true;
   let ob = req.body;
@@ -129,8 +127,9 @@ app.post("/getScore",(req,res) => {
   let empl = parseInt(ob.emp.replace(/['"]+/g, ''));
   let gender = parseInt(ob.gender.replace(/['"]+/g, ''));
   let prex = parseInt(ob.prex.replace(/['"]+/g, ''));
-    //let score = Number(ob.score);
-  console.log(age);
+  //resetDatabase();
+  //let score = Number(ob.score);
+  console.log(prexArr,genderArr);
   let out = [];
   out.push(ageSum[age]/ageData[age].length);
   out.push(empSum[empl]/empData[empl].length);
@@ -177,4 +176,17 @@ function setArrs(){
   empSum = data.empSum;
   genderSum = data.genderSum;
   prexSum = data.prexSum;
+}
+
+//ONLY USE FOR EMERGENCIES WHEN DATA IS CORRUPTED
+function resetDatabase(){
+  ageData = [[69],[70],[80],[90],[99]];
+  empData = [[57],[69],[69],[50],[70],[60]];
+  genderArr = [[50],[50]];
+  prexArr = [[10],[20],[30],[40],[50],[60]];
+  ageSum = [69,70,80,90,99];
+  empSum = [57,69,69,50,70,60];
+  genderSum = [50,50];
+  prexSum = [10,20,30,40,50,60];
+  updateFirebased();
 }
