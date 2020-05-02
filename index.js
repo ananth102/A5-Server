@@ -16,6 +16,7 @@ let firebaseConfig = {
   appId: "1:754261369831:web:60ccb3ec5af66b750fd342"
 };
 let data = {};
+let initialized = false;
 function getData() {
   let v = {};
   return database
@@ -82,7 +83,8 @@ app.post("/registerScore",(req,res) => {
     //format -> {hash key: x age:}
     //let hId = ob.hash;
     console.log("reg",data);
-    setArrs();
+    if(!initialized)setArrs();
+    initialized = true;
     let ob = req.body;
     if (typeof ob == "string"){
       ob = JSON.parse(ob);
@@ -92,7 +94,7 @@ app.post("/registerScore",(req,res) => {
     let gender = parseInt(ob.gender.replace(/['"]+/g, ''));
     let prex = parseInt(ob.prex.replace(/['"]+/g, ''));
     let score = parseFloat(ob.score.replace(/['"]+/g, ''));
-    
+
     ageSum[age]+=score;
     empSum[empl]+=score;
     genderSum[gender]+=score;
@@ -113,7 +115,8 @@ app.post("/getScore",(req,res) => {
   //format -> {hash key: x age:}
   //let hId = ob.hash;
   //console.log(data);
-  setArrs();
+  if(!initialized)setArrs();
+  initialized = true;
   let ob = req.body;
     if (typeof ob == "string"){
       ob = JSON.parse(ob);
